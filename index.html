@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>index</title>
+  <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    #sketch{}
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    #penWeight{
+      top: 80px;
+      left: 25px;
+      background: url("imgsrc/Penicon.png") center center no-repeat;
+      background-size: 15px 50px;
+    }
+    #brushWeight{
+      top: 175px;
+      left: 25px;
+      background: url("imgsrc/Brushicon.png") center center no-repeat;
+      background-size: 25px 50px;
+    }
+    #cancel{
+      top: 270px;
+      left: 25px;
+      background: url("imgsrc/Cancelicon.png") center center no-repeat;
+      background-size: 50px 34px;
+    }
+    #p_cntr{
+      position: absolute;
+      top: 365px;
+      left: 25px;
+    }
+    #pallet{
+      background-color: black;
+    }
+    .icons{
+      width: 70px;
+      height: 70px;
+      position: fixed;
+      box-sizing: border-box;
+      display: inline-block;
+      position: absolute;
+      border-radius: 100%;
+      border: 5px solid gray;
+      background-color: rgb(100,100,100);
+      cursor: pointer;      
+      z-index: 1;
+    }
+    /*.icons:hover{
+      background-color: rgb(200,200,200);
+    }*/
+    .colorVal{
+      display: inline-block;
+      margin: 5px;
+      border-radius: 100%;
+      width: 30px;
+      height: 30px;
+    }
+    #header{
+      display: block;
+      background-color: rgba(0,0,0,0.8);
+      /*height: 110px;*/
+      height: 55px;
+    }
+    #title{
+      position: relative;
+      display: inline-block;
+      font-family: sans-serif;
+      /*font-size: 80px;*/
+      font-size: 40px;
+      color: white;
+      font-weight: bold;
+      /*left: 50px;*/
+      left: 25px;
+    }
+    #footer{
+      display: block;
+      background-color: rgba(0,0,0,0.8);
+      /*height: 110px;*/
+      height: 55px;
+    }
+    #ticker{
+      position: relative;
+      display: block;
+      margin: 11px 0px;
+      font-family: sans-serif;
+      /*font-size: 64px;*/
+      font-size: 25px;
+      color: yellow;
+      text-align: center;
+      width: 100%;
+      /*left: 50px;*/
+      /*left: 25px;*/
+      float: right;
+      overflow: scroll;
+    }
+    #button_cntr{
+      position: relative;
+      float: right;
+      display: none;
+    }
+    .buttons{
+      position: relative;
+      margin: 11px 10px 11px 0px;
+      background-color: rgb(100,100,100);
+      border-radius: 30px;
+      display: block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Arial;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 5px 15px;
+      text-decoration: none;
+      vertical-align: top;
+      float: right;
+    }
+
+    .buttons:active {
+      position: relative;
+      top: 1px;
+      background-color: gray;
+    }
+    .hashtag{
+      position: relative;
+      margin: 11px 10px 11px 0px;
+      display: block;
+      color: #ffffff;
+      font-family: Arial;
+      font-size: 20px;
+      font-weight: bold;
+      padding: 5px 15px;
+      text-decoration: none;
+      /*vertical-align: top;*/
+      float: right;
+    }
+    #spaceAlert{
+      box-sizing: border-box;
+      position: absolute;
+      border-radius: 100%;
+      border: 5px dotted red;
+      transition: border 2s, width 2s, height 2s, left 2s, top 2s;
+    }
+
+    #cover{
+      position: fixed;
+      display: none;
+      top: 0px;
+      left: 0px;
+      width: 2000px;
+      height: 1000px;
+      z-index: 999;
+      background: url('imgsrc/AIicon.png') center center no-repeat;
+      background-color: rgba(0,0,0,.5);
+      background-size: 300px 300px; 
+    }
+    #twinkle{
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 980px;
+      height: 689px;
+      z-index: 999;
+      background: url('imgsrc/Penicon_red.png') center center no-repeat;
+      /*background-color: rgba(0,0,0,.5);*/
+      background-size: 45px 150px; 
+    }
+    #colorchart{
+      width: 120px;
+      height: 150px;
+      border-collapse: collapse;
+      cursor: pointer;
+    }
+
+  </style>
+  <script language="javascript" type="text/javascript" src="https://storage.googleapis.com/quickdraw-models/sketchRNN/large_models/bird.gen.js"></script> 
+  <script language="javascript" type="text/javascript" src="p5.min.js"></script>
+  <script language="javascript" type="text/javascript" src="p5.dom.min.js"></script>
+  <script language="javascript" type="text/javascript" src="https://storage.googleapis.com/quickdraw-models/sketchRNN/lib/numjs.js"></script>
+  <script language="javascript" type="text/javascript" src="sketch_rnn.js"></script> 
+</head>
+
+<body style="background-color:white">
+  <div id="header">
+    <div id ="title">HCCL</div>
+    <div id ="button_sel3" class = "hashtag">#Please</div>
+    <div id ="button_sel2" class = "hashtag">#Anything</div>
+    <div id ="button_sel1" class = "hashtag">#Draw</div>
+  </div>
+  <div id="sketch"></div>
+  <div id="penWeight" class="icons"></div>
+  <div id='brushWeight' class="icons"></div>
+  <div id='cancel' class="icons"></div>
+  <div id='p_cntr'>
+    <div id='pallet' class="icons"></div>
+    <div id='palVal' style='display:none'>
+      <table id="colorchart"><tr><td bgColor="#FBEFEF"></td><td bgColor="#FBF2EF"></td><td bgColor="#FBF5EF"></td><td bgColor="#FBF8EF"></td><td bgColor="#FBFBEF"></td><td bgColor="#F8FBEF"></td><td bgColor="#F5FBEF"></td><td bgColor="#F2FBEF"></td><td bgColor="#EFFBEF"></td><td bgColor="#EFFBF2"></td><td bgColor="#EFFBF5"></td><td bgColor="#EFFBF8"></td><td bgColor="#EFFBFB"></td><td bgColor="#EFF8FB"></td><td bgColor="#EFF5FB"></td><td bgColor="#EFF2FB"></td><td bgColor="#EFEFFB"></td><td bgColor="#F2EFFB"></td><td bgColor="#F5EFFB"></td><td bgColor="#F8EFFB"></td><td bgColor="#FBEFFB"></td><td bgColor="#FBEFF8"></td><td bgColor="#FBEFF5"></td><td bgColor="#FBEFF2"></td><td bgColor="#FFFFFF"></td></tr>
+ <tr><td bgColor="#F8E0E0"></td><td bgColor="#F8E6E0"></td><td bgColor="#F8ECE0"></td><td bgColor="#F7F2E0"></td><td bgColor="#F7F8E0"></td><td bgColor="#F1F8E0"></td><td bgColor="#ECF8E0"></td><td bgColor="#E6F8E0"></td><td bgColor="#E0F8E0"></td><td bgColor="#E0F8E6"></td><td bgColor="#E0F8EC"></td><td bgColor="#E0F8F1"></td><td bgColor="#E0F8F7"></td><td bgColor="#E0F2F7"></td><td bgColor="#E0ECF8"></td><td bgColor="#E0E6F8"></td><td bgColor="#E0E0F8"></td><td bgColor="#E6E0F8"></td><td bgColor="#ECE0F8"></td><td bgColor="#F2E0F7"></td><td bgColor="#F8E0F7"></td><td bgColor="#F8E0F1"></td><td bgColor="#F8E0EC"></td><td bgColor="#F8E0E6"></td><td bgColor="#FAFAFA"></td></tr>
+ <tr><td bgColor="#F6CECE"></td><td bgColor="#F6D8CE"></td><td bgColor="#F6E3CE"></td><td bgColor="#F5ECCE"></td><td bgColor="#F5F6CE"></td><td bgColor="#ECF6CE"></td><td bgColor="#E3F6CE"></td><td bgColor="#D8F6CE"></td><td bgColor="#CEF6CE"></td><td bgColor="#CEF6D8"></td><td bgColor="#CEF6E3"></td><td bgColor="#CEF6EC"></td><td bgColor="#CEF6F5"></td><td bgColor="#CEECF5"></td><td bgColor="#CEE3F6"></td><td bgColor="#CED8F6"></td><td bgColor="#CECEF6"></td><td bgColor="#D8CEF6"></td><td bgColor="#E3CEF6"></td><td bgColor="#ECCEF5"></td><td bgColor="#F6CEF5"></td><td bgColor="#F6CEEC"></td><td bgColor="#F6CEE3"></td><td bgColor="#F6CED8"></td><td bgColor="#F2F2F2"></td></tr>
+ <tr><td bgColor="#F5A9A9"></td><td bgColor="#F5BCA9"></td><td bgColor="#F5D0A9"></td><td bgColor="#F3E2A9"></td><td bgColor="#F2F5A9"></td><td bgColor="#E1F5A9"></td><td bgColor="#D0F5A9"></td><td bgColor="#BCF5A9"></td><td bgColor="#A9F5A9"></td><td bgColor="#A9F5BC"></td><td bgColor="#A9F5D0"></td><td bgColor="#A9F5E1"></td><td bgColor="#A9F5F2"></td><td bgColor="#A9E2F3"></td><td bgColor="#A9D0F5"></td><td bgColor="#A9BCF5"></td><td bgColor="#A9A9F5"></td><td bgColor="#BCA9F5"></td><td bgColor="#D0A9F5"></td><td bgColor="#E2A9F3"></td><td bgColor="#F5A9F2"></td><td bgColor="#F5A9E1"></td><td bgColor="#F5A9D0"></td><td bgColor="#F5A9BC"></td><td bgColor="#E6E6E6"></td></tr>
+ <tr><td bgColor="#F78181"></td><td bgColor="#F79F81"></td><td bgColor="#F7BE81"></td><td bgColor="#F5DA81"></td><td bgColor="#F3F781"></td><td bgColor="#D8F781"></td><td bgColor="#BEF781"></td><td bgColor="#9FF781"></td><td bgColor="#81F781"></td><td bgColor="#81F79F"></td><td bgColor="#81F7BE"></td><td bgColor="#81F7D8"></td><td bgColor="#81F7F3"></td><td bgColor="#81DAF5"></td><td bgColor="#81BEF7"></td><td bgColor="#819FF7"></td><td bgColor="#8181F7"></td><td bgColor="#9F81F7"></td><td bgColor="#BE81F7"></td><td bgColor="#DA81F5"></td><td bgColor="#F781F3"></td><td bgColor="#F781D8"></td><td bgColor="#F781BE"></td><td bgColor="#F7819F"></td><td bgColor="#D8D8D8"></td></tr>
+ <tr><td bgColor="#FA5858"></td><td bgColor="#FA8258"></td><td bgColor="#FAAC58"></td><td bgColor="#F7D358"></td><td bgColor="#F4FA58"></td><td bgColor="#D0FA58"></td><td bgColor="#ACFA58"></td><td bgColor="#82FA58"></td><td bgColor="#58FA58"></td><td bgColor="#58FA82"></td><td bgColor="#58FAAC"></td><td bgColor="#58FAD0"></td><td bgColor="#58FAF4"></td><td bgColor="#58D3F7"></td><td bgColor="#58ACFA"></td><td bgColor="#5882FA"></td><td bgColor="#5858FA"></td><td bgColor="#8258FA"></td><td bgColor="#AC58FA"></td><td bgColor="#D358F7"></td><td bgColor="#FA58F4"></td><td bgColor="#FA58D0"></td><td bgColor="#FA58AC"></td><td bgColor="#FA5882"></td><td bgColor="#BDBDBD"></td></tr>
+ <tr><td bgColor="#FE2E2E"></td><td bgColor="#FE642E"></td><td bgColor="#FE9A2E"></td><td bgColor="#FACC2E"></td><td bgColor="#F7FE2E"></td><td bgColor="#C8FE2E"></td><td bgColor="#9AFE2E"></td><td bgColor="#64FE2E"></td><td bgColor="#2EFE2E"></td><td bgColor="#2EFE64"></td><td bgColor="#2EFE9A"></td><td bgColor="#2EFEC8"></td><td bgColor="#2EFEF7"></td><td bgColor="#2ECCFA"></td><td bgColor="#2E9AFE"></td><td bgColor="#2E64FE"></td><td bgColor="#2E2EFE"></td><td bgColor="#642EFE"></td><td bgColor="#9A2EFE"></td><td bgColor="#CC2EFA"></td><td bgColor="#FE2EF7"></td><td bgColor="#FE2EC8"></td><td bgColor="#FE2E9A"></td><td bgColor="#FE2E64"></td><td bgColor="#A4A4A4"></td></tr>
+ <tr><td bgColor="#FF0000"></td><td bgColor="#FF4000"></td><td bgColor="#FF8000"></td><td bgColor="#FFBF00"></td><td bgColor="#FFFF00"></td><td bgColor="#BFFF00"></td><td bgColor="#80FF00"></td><td bgColor="#40FF00"></td><td bgColor="#00FF00"></td><td bgColor="#00FF40"></td><td bgColor="#00FF80"></td><td bgColor="#00FFBF"></td><td bgColor="#00FFFF"></td><td bgColor="#00BFFF"></td><td bgColor="#0080FF"></td><td bgColor="#0040FF"></td><td bgColor="#0000FF"></td><td bgColor="#4000FF"></td><td bgColor="#8000FF"></td><td bgColor="#BF00FF"></td><td bgColor="#FF00FF"></td><td bgColor="#FF00BF"></td><td bgColor="#FF0080"></td><td bgColor="#FF0040"></td><td bgColor="#848484"></td></tr>
+ <tr><td bgColor="#DF0101"></td><td bgColor="#DF3A01"></td><td bgColor="#DF7401"></td><td bgColor="#DBA901"></td><td bgColor="#D7DF01"></td><td bgColor="#A5DF00"></td><td bgColor="#74DF00"></td><td bgColor="#3ADF00"></td><td bgColor="#01DF01"></td><td bgColor="#01DF3A"></td><td bgColor="#01DF74"></td><td bgColor="#01DFA5"></td><td bgColor="#01DFD7"></td><td bgColor="#01A9DB"></td><td bgColor="#0174DF"></td><td bgColor="#013ADF"></td><td bgColor="#0101DF"></td><td bgColor="#3A01DF"></td><td bgColor="#7401DF"></td><td bgColor="#A901DB"></td><td bgColor="#DF01D7"></td><td bgColor="#DF01A5"></td><td bgColor="#DF0174"></td><td bgColor="#DF013A"></td><td bgColor="#6E6E6E"></td></tr>
+ <tr><td bgColor="#B40404"></td><td bgColor="#B43104"></td><td bgColor="#B45F04"></td><td bgColor="#B18904"></td><td bgColor="#AEB404"></td><td bgColor="#86B404"></td><td bgColor="#5FB404"></td><td bgColor="#31B404"></td><td bgColor="#04B404"></td><td bgColor="#04B431"></td><td bgColor="#04B45F"></td><td bgColor="#04B486"></td><td bgColor="#04B4AE"></td><td bgColor="#0489B1"></td><td bgColor="#045FB4"></td><td bgColor="#0431B4"></td><td bgColor="#0404B4"></td><td bgColor="#3104B4"></td><td bgColor="#5F04B4"></td><td bgColor="#8904B1"></td><td bgColor="#B404AE"></td><td bgColor="#B40486"></td><td bgColor="#B4045F"></td><td bgColor="#B40431"></td><td bgColor="#585858"></td></tr>
+ <tr><td bgColor="#8A0808"></td><td bgColor="#8A2908"></td><td bgColor="#8A4B08"></td><td bgColor="#886A08"></td><td bgColor="#868A08"></td><td bgColor="#688A08"></td><td bgColor="#4B8A08"></td><td bgColor="#298A08"></td><td bgColor="#088A08"></td><td bgColor="#088A29"></td><td bgColor="#088A4B"></td><td bgColor="#088A68"></td><td bgColor="#088A85"></td><td bgColor="#086A87"></td><td bgColor="#084B8A"></td><td bgColor="#08298A"></td><td bgColor="#08088A"></td><td bgColor="#29088A"></td><td bgColor="#4B088A"></td><td bgColor="#6A0888"></td><td bgColor="#8A0886"></td><td bgColor="#8A0868"></td><td bgColor="#8A084B"></td><td bgColor="#8A0829"></td><td bgColor="#424242"></td></tr>
+ <tr><td bgColor="#610B0B"></td><td bgColor="#61210B"></td><td bgColor="#61380B"></td><td bgColor="#5F4C0B"></td><td bgColor="#5E610B"></td><td bgColor="#4B610B"></td><td bgColor="#38610B"></td><td bgColor="#21610B"></td><td bgColor="#0B610B"></td><td bgColor="#0B6121"></td><td bgColor="#0B6138"></td><td bgColor="#0B614B"></td><td bgColor="#0B615E"></td><td bgColor="#0B4C5F"></td><td bgColor="#0B3861"></td><td bgColor="#0B2161"></td><td bgColor="#0B0B61"></td><td bgColor="#210B61"></td><td bgColor="#380B61"></td><td bgColor="#4C0B5F"></td><td bgColor="#610B5E"></td><td bgColor="#610B4B"></td><td bgColor="#610B38"></td><td bgColor="#610B21"></td><td bgColor="#2E2E2E"></td></tr>
+ <tr><td bgColor="#3B0B0B"></td><td bgColor="#3B170B"></td><td bgColor="#3B240B"></td><td bgColor="#3A2F0B"></td><td bgColor="#393B0B"></td><td bgColor="#2E3B0B"></td><td bgColor="#243B0B"></td><td bgColor="#173B0B"></td><td bgColor="#0B3B0B"></td><td bgColor="#0B3B17"></td><td bgColor="#0B3B24"></td><td bgColor="#0B3B2E"></td><td bgColor="#0B3B39"></td><td bgColor="#0B2F3A"></td><td bgColor="#0B243B"></td><td bgColor="#0B173B"></td><td bgColor="#0B0B3B"></td><td bgColor="#170B3B"></td><td bgColor="#240B3B"></td><td bgColor="#2F0B3A"></td><td bgColor="#3B0B39"></td><td bgColor="#3B0B2E"></td><td bgColor="#3B0B24"></td><td bgColor="#3B0B17"></td><td bgColor="#1C1C1C"></td></tr>
+ <tr><td bgColor="#2A0A0A"></td><td bgColor="#2A120A"></td><td bgColor="#2A1B0A"></td><td bgColor="#29220A"></td><td bgColor="#292A0A"></td><td bgColor="#222A0A"></td><td bgColor="#1B2A0A"></td><td bgColor="#122A0A"></td><td bgColor="#0A2A0A"></td><td bgColor="#0A2A12"></td><td bgColor="#0A2A1B"></td><td bgColor="#0A2A22"></td><td bgColor="#0A2A29"></td><td bgColor="#0A2229"></td><td bgColor="#0A1B2A"></td><td bgColor="#0A122A"></td><td bgColor="#0A0A2A"></td><td bgColor="#120A2A"></td><td bgColor="#1B0A2A"></td><td bgColor="#220A29"></td><td bgColor="#2A0A29"></td><td bgColor="#2A0A22"></td><td bgColor="#2A0A1B"></td><td bgColor="#2A0A12"></td><td bgColor="#151515"></td></tr>
+ <tr><td bgColor="#190707"></td><td bgColor="#190B07"></td><td bgColor="#191007"></td><td bgColor="#181407"></td><td bgColor="#181907"></td><td bgColor="#141907"></td><td bgColor="#101907"></td><td bgColor="#0B1907"></td><td bgColor="#071907"></td><td bgColor="#07190B"></td><td bgColor="#071910"></td><td bgColor="#071914"></td><td bgColor="#071918"></td><td bgColor="#071418"></td><td bgColor="#071019"></td><td bgColor="#070B19"></td><td bgColor="#070719"></td><td bgColor="#0B0719"></td><td bgColor="#100719"></td><td bgColor="#140718"></td><td bgColor="#190718"></td><td bgColor="#190714"></td><td bgColor="#190710"></td><td bgColor="#19070B"></td><td bgColor="#000000"></td></tr>
+</table>
+    </div>
+  </div>
+  <div id="footer">
+    <div id="button_cntr">
+      <div id ="button_no" class = "buttons">no</div>
+      <div id ="button_yes" class = "buttons">yes</div>
+    </div>
+    <div id ="ticker">잠시만 기다려주세요!</div>
+  </div>
+  <div id='spaceAlert' style='display:none'></div>
+  <div id='cover' style='display:none'></div>
+  <div id='twinkle' style='display:none'></div>
+  <!--<div id="settings">
+    {{ settings }}
+  </div>-->
+</body>
+
+<script type="text/javascript" src="drawMode.js"></script>
+<script language="javascript" type="text/javascript">
+
+  function shuffle(array) {
+    var currentIndex = array.length,
+      temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  }
+  var sketch = function(p) {
+    "use strict"
+
+    var startingStrokes;
+
+    var use_large_models = true;
+
+    // sketch_rnn model
+    var model_loaded = false;
+    var model;
+    var model_data;
+    var temperature = 0.01;
+    var refresh_count = 1;
+
+    var modelPdf; // store all the parameters of a mixture-density distribution
+    var model_state, model_state_orig;
+    var modelStrokes = []; // keep track of the strokes the model drew
+    var modelPen = Pen();
+    // var modelNames;
+
+    //simModel variables
+    var min_sequence_length = 5;
+    var modelSim_z;
+    var modelSim_state;
+    var modelSim_x;
+    var modelSim_y;
+    var modelSim_dx;
+    var modelSim_dy;
+    var modelSim_is_active;
+    var modelSim_steps;
+    var modelSim_prev_pen;
+    var origin_x, origin_y;
+    var simModelChanged=false;
+
+    function Pen() {
+      var state = {
+        active: false,
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        down: 0,
+        up: 0,
+        end: 0,
+        prevDown: 0,
+        prevUp: 0,
+        prevEnd: 0
+      }
+      state.updateCurrent = function(stroke) {
+        state.dx = stroke[0]
+        state.dy = stroke[1]
+        // we update the previous by default
+        state.updateCurrentPen(stroke.slice(2, 5))
+      }
+      state.updatePrev = function(stroke) {
+        state.dx = stroke[0]
+        state.dy = stroke[1]
+        // we update the previous by default
+        state.updatePrevPen(stroke.slice(2, 5))
+      }
+      state.updateCurrentPen = function(array) {
+        state.down = array[0]
+        state.up = array[1]
+        state.end = array[2]
+      }
+      state.updatePrevPen = function(array) {
+        state.prevDown = array[0]
+        state.prevUp = array[1]
+        state.prevEnd = array[2]
+      }
+      state.getStroke = function() {
+        return [state.dx, state.dy, state.down, state.up, state.end]
+      }
+      state.getCurrentPen = function() {
+        return [state.down, state.up, state.end]
+      }
+      state.getPrevPen = function() {
+        return [state.prevDown, state.prevUp, state.prevEnd]
+      }
+      return state;
+    }
+
+    // variables for the sketch input interface.
+    var userPen = {
+      currentState: 0,
+      prevState: 0,
+    }
+    var x, y; // absolute coordinates on the screen of where the pen is
+    var start_x, start_y;
+    var has_started; // set to true after user starts writing.
+    var just_finished_line;
+    var epsilon = 1.0; // to ignore data from user's pen staying in one spot.
+    var raw_line_color; 
+    //var raw_lines;
+    var current_raw_line;
+    // var strokes;
+    var current_strokes;
+    var final_strokes = null;
+    var line_color, predict_line_color;
+    var line_color_alpha = 64;
+    var final_color_alpha = 255;
+    // demo strokes
+    var startingStrokeIndex;
+    var demo_finished = false;
+    var last_time; // for keeping track of drawing speed
+    var smallPause = false;
+    // Strokes for similar image that generated by unconditional VAE 
+    var prevImageStrokes;     
+
+    //UI
+    // var screen_width, screen_height, temperature_slider;
+    var line_width = 3;
+    var screen_scale_factor = 3.0;
+
+    // dom
+    var reset_button, model_sel, random_model_button;
+    var text_title, text_temperature;
+    var changing_model_lock = true;
+    var restarting_model_lock = false;
+    var restarting_model_lock_count = 0;
+    var restarting_model_lock_frames = 30;
+    var clear_text_color, random_text_color;
+    var clear_text_background, random_text_background;
+    var canvas;
+    var title_text = "sketch-rnn predictor.";
+    var old_title_text = "sketch-rnn";
+    var run_encode_strokes;
+    var ticker;
+    var title;
+    var header;
+    var footer;
+    var headerHeight=55;
+    var footerHeight=55;
+    var select_dom;
+    // tracking mouse  touchpad
+    var tracking = {
+      down: false,
+      x: 0,
+      y: 0
+    };
+
+    function format_title_text(name) {
+      name = name.split('_').join(' ');
+      var c = name[0];
+
+      /*
+      var a = ' a ';
+      var c = name[0];
+      if (c === 'a' || c === 'e' || c === 'i' || c === 'o' || c === 'u') {
+        a = ' an ';
+      }
+      */
+
+      return 'start drawing ' + name + '.';
+    };
+
+    function set_title_text(new_text) {
+      title_text = new_text.split('_').join(' ');
+      // document.getElementById("loading_text").innerText = title_text;
+    };
+    function set_ticker_text(new_text) {
+      var ticker = document.getElementById("ticker")
+      ticker.innerText = new_text;
+      var btn_width;
+      if(document.getElementById('button_cntr')) btn_width = document.getElementById('button_cntr').clientWidth;
+      else btn_width = 0; 
+      ticker.style.width = screen_width - btn_width + 'px';
+
+    };
+
+    var draw_example = function(example, start_x, start_y, line_color, prev_pen_override) {
+      console.log('draw_examlple called!');
+
+      var i, j;
+      var x = start_x,
+        y = start_y;
+      var dx, dy;
+      var pen_down, pen_up, pen_end;
+      var prev_pen = [1, 0, 0];
+
+      //draw ClipArt dish
+      if(drawClipArtAfterSweep && drawMode == 1) p.image(img, clip_x, clip_y, clip_w, clip_h);      
+
+      if (Array.isArray(prev_pen_override)) {
+        penState = prev_pen_override;
+      }
+
+      p.curveTightness(0.5);
+
+      var lines = []; //save all line points
+      var line = []; //save a point array of each line
+      var pt;
+
+      line.push([x, y]);
+        
+      for (i = 0; i < example.length; i++) {
+        // sample the next pen's states from our probability distribution
+        [dx, dy, pen_down, pen_up, pen_end] = example[i];
+
+        if (prev_pen[2] == 1) { // end of drawing.
+          break;
+        }
+
+        x += dx;
+        y += dy;
+
+        // only draw on the paper if the pen is touching the paper
+        if (prev_pen[0] == 1) {
+          line.push([x, y]);
+        } else { //pen_up state
+          lines.push(line);
+          line = [];
+          line.push([x, y]);
+        }
+
+        // update the previous pen's state to the current one we just sampled
+        prev_pen = [pen_down, pen_up, pen_end];
+      }
+      if (line.length > 0) {
+        lines.push(line);
+        //colors, penWeight 와 lines 길이 맞추기
+        while(lines.length>colors.length){
+          //console.log('lines.length',lines.length,'colors.length',colors.length);
+          colors.push(curCol.slice()); // array deep copy
+          penWeights.push(curPenWeight);
+        }
+        while(lines.length<colors.length){
+          //console.log('lines.length',lines.length,'colors.length',colors.length);
+          colors.pop(curCol);
+          penWeights.pop(curPenWeight);
+        }
+        if(lines.length===colors.length){
+          raw_lines = raw_lines.slice(0,lines.length);
+          console.log('lines.length',lines.length,'colors.length',colors.length,'penWeights.length',penWeights.length,'strokes.length',strokes.length,'raw_lines.length',raw_lines.length); 
+          line = [];
+        }
+      }
+
+//      p.stroke(line_color);
+//      p.strokeWeight(line_width);
+//      console.log(lines.length, colors.length);
+//      p.noFill();
+
+      //프레임마다 strokes[]안의 옵젝들 그려주는 부분 
+      for (i = 0; i < (length_obj2?length_obj2:lines.length); i++){
+        line = lines[i];
+        if (line.length > 1) {
+          pt = line[0];
+          p.noFill();
+          // p.stroke('black');
+          p.stroke(colors[i]);
+          p.strokeWeight(penWeights[i]);
+          p.beginShape();
+          p.curveVertex(pt[0], pt[1]);
+          for (j = 0; j < line.length; j++) {
+            pt = line[j];
+            p.curveVertex(pt[0], pt[1]);
+          }
+          p.curveVertex(pt[0], pt[1]);
+          p.endShape();
+        }
+      }
+
+      //draw ClipArt coconut || nose
+      if(drawClipArtAfterSweep && (drawMode == 0 || drawMode ==2)){
+        p.image(img, clip_x, clip_y, clip_w, clip_h);
+      }
+
+      //clip이후 나머지 stroke 그리기
+      for (i = length_obj2; i < lines.length; i++){
+        line = lines[i];
+        if (line.length > 1) {
+          pt = line[0];
+          p.noFill();
+          // p.stroke('black');
+          p.stroke(colors[i]);
+          p.strokeWeight(penWeights[i]);
+          p.beginShape();
+          p.curveVertex(pt[0], pt[1]);
+          for (j = 0; j < line.length; j++) {
+            pt = line[j];
+            p.curveVertex(pt[0], pt[1]);
+          }
+          p.curveVertex(pt[0], pt[1]);
+          p.endShape();
+        }
+      }
+
+    };
+
+    var init = function(cb) {
+      ModelImporter.set_init_model(model_raw_data);
+      if (use_large_models) {
+        ModelImporter.set_model_url("https://storage.googleapis.com/quickdraw-models/sketchRNN/large_models/");
+      }
+      model_data = ModelImporter.get_model_data();
+      model = new SketchRNN(model_data);
+
+      var initial_model;
+      if(drawMode==0) initial_model = 'palm_tree';
+      else if(drawMode==1) initial_model = 'strawberry';
+      else if(drawMode==2) initial_model = 'eye';
+
+      ModelImporter.change_model({}, initial_model, "gen", function(new_model) {
+        console.log("changing")
+        model = new_model
+        model.set_pixel_factor(screen_scale_factor);
+        //set_title_text(format_title_text(model.info.name));
+        cb();
+        changing_model_lock = false;
+        set_title_text('draw a shape, any shape.');
+        model_loaded = true;
+      }, true);
+
+      header = document.getElementById("header");
+      header.style.height = headerHeight;
+      footer = document.getElementById("footer");
+      footer.style.height = footerHeight;
+      screen_width = get_window_width(); //window.innerWidth
+      screen_height = (get_window_height()-(headerHeight+footerHeight)); //window.innerHeight -110 
+      // document.getElementById('title').innerHTML = get_window_width() +" "+ get_window_height(); //llllll
+      title = document.getElementById("title");
+      title.style.width = screen_width * 0.4 + 'px';
+      // ticker = document.getElementById("ticker");
+      // ticker.style.width = screen_width * 0.75 + 'px';
+
+      var canvas = document.getElementsByTagName("canvas")[0];
+      canvas.addEventListener("mousedown", function(e) {
+        devicePressed(e.clientX, e.clientY);
+      })
+      canvas.addEventListener("mousemove", function(e) {
+        if (tracking.down) {
+          devicePressed(e.clientX, e.clientY);
+        }
+      })
+      canvas.addEventListener("mouseup", function(e) {
+        deviceReleased();
+      })
+      canvas.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        devicePressed(e.touches[0].clientX, e.touches[0].clientY);
+      })
+      canvas.addEventListener("touchmove", function(e) {
+        e.preventDefault();
+        if (tracking.down) {
+          devicePressed(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      })
+      canvas.addEventListener("touchend", function(e) {
+        e.preventDefault();
+        deviceReleased();
+      })
+
+      // cb();
+    }
+
+    var encode_strokes = function(sequence) {
+
+      if (sequence && sequence.length > 0) {
+        console.log("encoding");
+        
+        // encode sequence
+        for (var i = 0; i < sequence.length - 1; i++) {
+          model_state_orig = model.update(sequence[i], model_state_orig);
+        }
+
+        restart_model(sequence);
+
+        modelPen.active = true;
+
+        set_title_text('')
+        console.log("finished encoding");
+      }
+    }
+    
+    function restart_model(sequence) {
+      model_state = model.copy_state(model_state_orig); // bounded
+      modelStrokes = []
+
+      var idx = raw_lines.length-1;
+      var last_point = raw_lines[idx][raw_lines[idx].length-1];
+      var last_x = last_point[0];
+      var last_y = last_point[1];
+      var s = sequence[sequence.length-1];
+
+      modelPen.x = last_x;
+      modelPen.y = last_y;
+      modelPen.updatePrev(s)
+    }
+
+    function init_model_coordinates() {
+      x = screen_width / 2.75;
+      y = screen_height / 2.0;
+      start_x = x;
+      start_y = y;
+
+      modelPen.x = x;
+      modelPen.y = y;
+      modelPen.updatePrevPen([0, 0, 0])
+      modelPen.active = false;
+
+      // demo_finished = false;
+      startingStrokeIndex = 0;
+    }
+
+    function restart() {
+      // reinitialize variables before calling p5.js setup.
+      line_color = p.color(0, 0, 0, line_color_alpha);
+      predict_line_color = p.color(p.random(64, 224), p.random(64, 224), p.random(64, 224), line_color_alpha);
+
+      // make sure we enforce some minimum size of our demo
+      screen_width = Math.max(window.innerWidth, 400);
+      screen_height = (Math.max(window.innerHeight, 320)-(headerHeight+footerHeight));
+
+      // variables for the sketch input interface.
+      userPen.currentState = 0
+      userPen.prevState = 1
+      // pen = 0;
+      // prev_pen = 1;
+      has_started = false; // set to true after user starts writing.
+      just_finished_line = false;
+      raw_lines = [];
+      current_raw_line = [];
+      strokes = [];
+      current_strokes = [];
+      modelStrokes = [];
+      //startingStrokes = startingStrokesData[Math.floor(Math.random() * startingStrokesData.length)];
+      // start drawing from somewhere in middle of the canvas
+      init_model_coordinates();
+
+      if (model) {
+        model_state_orig = model.zero_state();
+        model_state_orig = model.update(model.zero_input(), model_state_orig);
+      }
+
+    };
+
+    function clear_screen() {
+      // console.log("CLEAR")
+      p.fill(255);
+      p.noStroke();
+      // p.rect(0, 0, screen_width, screen_height-41);
+      p.rect(0, 0, screen_width, screen_height);
+      p.stroke(0);
+    };
+
+    p.setup = function() {
+      //Mode setting
+      setMode(1,!true);
+      init(function() {
+        console.log('ready.');
+        // draw_random_example();
+      });
+      restart();
+      canvas = p.createCanvas(screen_width, screen_height);
+      p.frameRate(30);
+      clear_screen();
+      last_time = +new Date();
+
+    }
+
+    function get_window_width() {
+      // return p.windowWidth;
+      return window.innerWidth;
+    }
+
+    function get_window_height() {
+      // return p.windowHeight;
+      return window.innerHeight;
+    }
+    
+    p.draw = function() {
+      //ticker show here & silentMode setting init.; 
+      if(task>=0 && task<taskText[drawMode].length){
+        isTalkative? set_ticker_text(taskText[drawMode][task]) : set_ticker_text('PRACTICE MODE');
+        //gen 시작전 raw_lines의 인덱스 저장
+        if(task == 5) length_obj1 = raw_lines.length;
+        //vae 시작전 raw_lines의 인덱스 저장
+        if(task == 7) length_obj2 = raw_lines.length;
+      }
+      
+      //-------here for TalkativeMode------
+      if(isTalkative){
+        if(task == 11 && !isTimeCntStart){
+          isTimeCntStart = true;
+          console.log('------settimeout start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout operate------');
+            task++; //task12
+            setTimeout(function() {
+              task++; //task13
+              button_cntr.style.display = 'inline-block';
+              button_no.style.display = 'inline-block';
+              button_yes.innerText = 'yes'; 
+              checkWhiteSpace();
+              checkAreaByArray();
+              isTimeCntStart = false;   
+            }, 2000);
+          }, 5000);
+        }
+        if(task == 13 && !isTimeCntStart){
+          isTimeCntStart = true;
+          console.log('------settimeout2 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout2 operate------');          
+            task++; //task14
+            setTimeout(function() {
+              task++; //task15
+              button_cntr.style.display = 'inline-block';
+              button_no.style.display = 'none';
+              button_yes.innerText = 'OK'; 
+            }, 2000);
+          }, 5000);
+        }
+      }
+      //-------here for silentMode-----
+      else{
+        if(task == 999 && !isTimeCntStart){ //나머지는 내가 그려볼게요
+        // if(task == 2 && !isTimeCntStart){ //나머지는 내가 그려볼게요
+          isTimeCntStart = true;
+          console.log('------settimeout_s1 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout_s1 operate------');
+            run_encode_strokes = false;
+            isModelDrawn = false; 
+          }, 3000);
+        }
+        if(task == 5 && !isTimeCntStart){ //또 다른 야자나무를 하나 더 그려볼게요!
+          isTimeCntStart = true;
+          console.log('------settimeout_s2 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout_s2 operate------');
+            findObjCoordinate(0, length_obj1);
+            toggleCover();
+            ModelImporter.change_model({}, modelNames, "vae", function(new_model) {
+              console.log("changing")
+              model = new_model
+              model.set_pixel_factor(screen_scale_factor);
+              changing_model_lock = false;
+              set_title_text('draw a shape, any shape.');
+              model_loaded = true;
+              simModelChanged = true;
+              toggleCover();
+            }, true);
+          }, 3000);
+        }
+        if(task == 7 && !isTimeCntStart){ //야자나무와 어울리는 코코넛을 그려볼게요!
+          isTimeCntStart = true;
+          console.log('------settimeout_s3 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout_s3 operate------');
+            setClipArtLoc();
+            // pen twinkle 3 times
+            setTimeout(function(){
+              if(!isIntervalStart) myInterval = setInterval(function(){
+                console.log('interval');
+                isIntervalStart = true;
+                if(intCnt > 4){
+                  clearInterval(myInterval);
+                  isTimeCntStart = false;
+                  isIntervalStart = false;
+                  intCnt = 0;
+                }
+                var twinkle = document.getElementById('twinkle');
+                if(twinkle.style.display == 'none') twinkle.style.display = 'initial';
+                else twinkle.style.display = 'none'
+                intCnt++;
+              }, 500);  //0.5sec 주기로 반짝
+            }, 3000); // 3초후 실행 반짝이 실행
+          }, 1000); // 1초후 클립아트 그리기
+        }
+        if(task == 13 && !isTimeCntStart){
+          isTimeCntStart = true;
+          console.log('------settimeout_s4 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout_s4 operate------');
+            checkWhiteSpace();
+            checkAreaByArray();
+            isTimeCntStart = false; 
+            task+=2; //task15 - toss to paintchainer
+          }, 5000); //5sec후 빈곳 알려줌
+        }
+        if(task == 15 && !isTimeCntStart){
+          isTimeCntStart = true;
+          console.log('------settimeout_s5 start------');
+          mySetTime = setTimeout(function() {
+            console.log('------settimeout_s5 operate------');
+            document.getElementById('twinkle').style.backgroundImage = 'url("imgsrc/Brushicon_red.png")';
+            // brush twinkle 3 times
+            if(!isIntervalStart) myInterval = setInterval(function(){
+                console.log('interval2');
+                isIntervalStart = true;
+                if(intCnt > 5){
+                  clearInterval(myInterval);
+                  isTimeCntStart = false;
+                  // p.saveCanvas 
+                  // p.saveCanvas(p.canvas,"canvasImage","png"); //save image
+                  
+                }
+                var twinkle = document.getElementById('twinkle');
+                if(twinkle.style.display == 'none') twinkle.style.display = 'initial';
+                else twinkle.style.display = 'none'
+                intCnt++;
+              }, 500);  //0.5sec 주기로 반짝
+          }, 5000); //5sec후 붓질 알려줌
+        }
+      }
+      //클립아트 스윕
+      if(drawClipArt){
+        var frame = 5; //30이 적절
+        clear_screen();
+        if(drawMode == 1){ // for dish
+          p.image(img, clip_x, (clip_y-clip_h)+clip_h/img.height*sy, clip_w, clip_h, 0, sy-img.height);
+          draw_example(strokes, start_x , start_y, line_color);
+          sy += img.height/frame; //30frame
+        }
+        else{
+          draw_example(strokes, start_x , start_y, line_color);
+          p.image(img, clip_x, (clip_y-clip_h)+clip_h/img.height*sy, clip_w, clip_h, 0, sy-img.height);
+          sy += img.height/frame; //30frame
+        }
+        if(sy>img.height){
+          drawClipArtAfterSweep = true;
+          drawClipArt = false;
+          clear_screen();
+          draw_example(strokes, start_x , start_y, line_color);
+        }
+      }
+      //------public setting----------
+      screen_width = get_window_width();
+      screen_height = (get_window_height()-(headerHeight+footerHeight));
+      //console.log(screen_width,screen_height)
+      if (run_encode_strokes) {
+        run_encode_strokes = false;
+        encode_strokes(current_strokes);
+        current_strokes = [];
+        if (strokes && strokes.length > 0) {
+          var ts = strokes[strokes.length - 1];
+          current_strokes.push([ts[0], ts[1], ts[2], ts[3], ts[4]]);
+        }
+        // set_title_text(format_title_text(model.name));
+      }
+
+      // record pen drawing from user:
+      clear_text_color = "rgba(0,0,0,0.5)"; // #3393d1
+      random_text_color = "rgba(0,0,0,0.5)"; // #3393d1
+      clear_text_background = false;
+      random_text_background = false;
+      // if (tracking.down && (tracking.x > 0) && (tracking.x < screen_width) && (tracking.y > 0) && tracking.y < screen_height) { // pen is touching the paper
+      if (model_loaded && tracking.down && (tracking.x > 0) && (tracking.x < screen_width) && (tracking.y > 0) && tracking.y < screen_height) { // pen is touching the paper
+        if (userPen.prevState == 1) {
+          clear_screen();
+          //내가 마우스 누르는동안 이전 오브젝트 그리기
+          draw_example(strokes, start_x, start_y, line_color);
+        }
+        if (has_started == false) { // first time anything is written
+          restarting_model_lock = false;
+
+          restart();
+          strokes = [];
+          clear_screen();
+          has_started = true;
+          demo_finished = true;
+
+          // line_color_alpha = final_color_alpha;
+          // line_color = p.color(0, 0, 0, line_color_alpha);
+          // predict_line_color = p.color(p.random(64, 224), p.random(64, 224), p.random(64, 224), line_color_alpha);
+          predict_line_color = curCol;
+          if(task===0) task++; //task0에서만 작동
+
+          x = tracking.x;
+          y = tracking.y;
+          start_x = x;
+          start_y = y;
+          userPen.currentState = 0;
+          current_raw_line.push([x, y]);
+        } else {
+          //사용자가 그림 그리는 부분 설정
+          var dx0 = tracking.x - x; // candidate for dx
+          var dy0 = tracking.y - y; // candidate for dy
+          if (dx0 * dx0 + dy0 * dy0 > epsilon * epsilon) { // only if pen is not in same area
+            var dx = dx0;
+            var dy = dy0;
+            userPen.currentState = 0
+
+            if (userPen.prevState == 0) {
+              p.stroke(curCol);
+              p.strokeWeight(curPenWeight); // nice thick line
+              p.line(x, y, x + dx, y + dy); // draw line connecting prev point to current point.
+              //task12 시간설정부분
+              if(isTimeCntStart){
+                console.log('------settimeout clear------');
+                clearTimeout(mySetTime);
+                isTimeCntStart = false;
+              }
+            }
+
+            // update the absolute coordinates from the offsets
+            x += dx;
+            y += dy;
+
+            // update raw_lines
+            current_raw_line.push([x, y]);
+            just_finished_line = true;
+
+            // using the previous pen states, and hidden state, get next hidden state
+            // update_rnn_state();
+          }
+        }
+      }
+
+      else { // pen is above the paper
+        userPen.currentState = 1;
+        if (just_finished_line) {
+          //
+          if(task==1){
+            task++;
+            if(isTalkative) button_cntr.style.display = 'inline-block';
+          }
+
+          //라인좌표를 curveVertex곡선으로 변환
+          var current_raw_line_simple = DataTool.simplify_line(current_raw_line);
+          var idx, last_point, last_x, last_y;
+
+          if (current_raw_line_simple.length > 1) {
+            if (raw_lines.length === 0) {
+              last_x = start_x;
+              last_y = start_y;
+            }
+            else {
+              idx = raw_lines.length - 1;
+              last_point = raw_lines[idx][raw_lines[idx].length - 1];
+              last_x = last_point[0];
+              last_y = last_point[1];
+            }
+            //raw_lines -> strokes 절대좌표를 상대좌표로 변환
+            var stroke = DataTool.line_to_stroke(current_raw_line_simple, [last_x, last_y]);
+            raw_lines.push(current_raw_line_simple);
+            strokes = strokes.concat(stroke);
+            current_strokes = current_strokes.concat(stroke);
+
+            // redraw simplified strokes
+            clear_screen();
+            if(strokes.length) draw_example(strokes, start_x, start_y, line_color);
+
+            old_title_text = title_text;
+            set_title_text("sketch-rnn is working ...");
+
+            // initialize rnn:
+            console.log('initialize rnn');
+            run_encode_strokes = true;
+
+          } else {
+            if (raw_lines.length === 0) {
+              has_started = false;
+            }
+          }
+
+          current_raw_line = [];
+          just_finished_line = false;
+        }
+        
+        if(restarting_model_lock) {
+          restarting_model_lock_count -= 1;
+          if (restarting_model_lock_count >= 0) {
+            return;
+          }
+          clear_screen();
+          // predict_line_color = p.color(p.random(64, 224), p.random(64, 224), p.random(64, 224),line_color_alpha);
+          predict_line_color = curCol;          
+          //sketch rnn이 그림 그리는동안 이전 strokes 오브젝트 캔버스에 표시
+          draw_example(strokes, start_x, start_y, line_color);
+          restarting_model_lock = false;
+        }
+
+        //vae 모델 그리기
+        if(simModelChanged==true){
+          if(!isSimDrawn){
+            //gen location control
+            var w = max_xy[0] - min_xy[0];
+            var h = max_xy[1] - min_xy[1];
+            if(drawMode == 0) initSimilarStrokes(max_xy[0]+w*0.2, min_xy[1]+h*0.3, strokes); //palm_tree;
+            else if(drawMode == 1) initSimilarStrokes(max_xy[0]+w*0.2, min_xy[1]+h*0.4, strokes); //strawberry;
+            else if(drawMode == 2) initSimilarStrokes(max_xy[0]+w*0.72, min_xy[1]+h*0, strokes); //eye;
+            // initSimilarStrokes(300, 300, prevImageStrokes);
+            isSimDrawn = true;
+          }
+          drawSimilarStrokes(0, 0);
+        }    
+
+        // have machine take over the drawing here:
+        if (modelPen.active && !run_encode_strokes && !isModelDrawn) {
+
+          modelPen.updateCurrentPen(modelPen.getPrevPen())
+
+          model_state = model.update(modelPen.getStroke(), model_state);
+          modelPdf = model.get_pdf(model_state);
+          var s =  model.sample(modelPdf, temperature);
+          modelPen.updateCurrent(s);
+          modelStrokes.push(s);0
+
+          if (modelPen.end === 1) {
+            // predict_line_color = p.color(p.random(64, 224), p.random(64, 224), p.random(64, 224), line_color_alpha);
+            clear_screen();
+            //final_strokes = strokes.concat(modelStrokes);
+            console.log('the length of strokes before drawing sketchRNN is', strokes.length);
+            var prevStrokesLength = strokes.length;
+            strokes = strokes.concat(modelStrokes); //strokes에 모델 패스 추가
+            strokes[strokes.length-1][3]=1;
+            strokes[strokes.length-1][4]=0;
+            console.log('the length of strokes after drawing sketchRNN is', strokes.length);
+            var curStrokesLength = strokes.length;
+            //console.log('curStrokesLength - prevStrokesLength',curStrokesLength , prevStrokesLength);
+            extStrokesLength = curStrokesLength - prevStrokesLength;
+            
+            StrokeToRaw();
+
+            //모델 스트로크 추가 후 마지막으로 완성본 그려주는 부분 
+            draw_example(strokes, start_x, start_y, curCol);
+            prevImageStrokes = strokes; 
+            restart_model(strokes);
+            restarting_model_lock = true;
+            restarting_model_lock_count = restarting_model_lock_frames;
+            isModelDrawn = true;
+
+            task = 3;
+            if(!isTalkative){
+              task = 5;
+              isTimeCntStart = false;  
+            }
+          } else {
+
+            if (modelPen.prevDown === 1) {
+              //draw line connecting prev point to current point.
+              p.stroke(curCol);
+              p.strokeWeight(curPenWeight);
+              p.line(modelPen.x, modelPen.y, modelPen.x + modelPen.dx, modelPen.y + modelPen.dy);
+            }
+
+            modelPen.updatePrevPen(modelPen.getCurrentPen())
+
+            modelPen.x += modelPen.dx;
+            modelPen.y += modelPen.dy;
+          }
+        }
+  
+      }
+
+      userPen.prevState = userPen.currentState;
+    };
+
+    var deviceReleased = function() {
+      tracking.down = false;
+      // console.log(tracking.down)
+    }
+
+    var devicePressed = function(x, y) {
+      tracking.x = x;
+      tracking.y = y - headerHeight;
+      if (!tracking.down) {
+        tracking.down = true;
+      }
+      // console.log(tracking.down, tracking.x, tracking.y)
+    };
+
+    var initSimilarStrokes = function(sx, sy, sequence){
+      //sx, sy - regular input: start_x, start_y
+      console.log("initSimilarStrokes called")
+      var mu, sigma;
+      if (sequence.length <= min_sequence_length) {
+        return;
+      }
+      // var short_sequence = model.copy_drawing(sequence, model.max_seq_len);
+      var short_sequence = model.copy_drawing(sequence);
+      [mu, sigma] = model.encode_to_mu_sigma(short_sequence);
+      modelSim_z = model.encode_from_mu_sigma(mu, sigma);
+      modelSim_state = model.get_init_state_from_latent_vector(modelSim_z);
+      modelSim_x = sx;
+      modelSim_y = sy;
+      modelSim_dx = 0;
+      modelSim_dy = 0;
+      modelSim_is_active = true;
+      // modelSim_steps = 0;
+      modelSim_prev_pen = [0, 0, 0];
+      console.log("short_sequence",short_sequence);
+      console.log("[mu, sigma]",[mu, sigma]);
+      temperature = 0.01
+    }
+
+    var firstTimeSim=true; //drawSimilarStrokes 첫실행 감지함수
+    var drawSimilarStrokes = function(origin_x, origin_y){  //jungwoo added this function
+      //origin_x, origin_y - drawing starting point
+      //console.log("drawSimilarStrokes called")
+      var pdf; // store all the parameters of a mixture-density distribution
+      var m_dx, m_dy, m_x, m_y;
+      var m_pen_down, m_pen_up, m_pen_end;
+      var x0, y0, x1, y1;
+
+      var o_x, o_y;
+
+      // var scale = Nsize;
+      // var fudge = 0;
+
+      if (modelSim_is_active) {
+          //console.log("modelSim_is_active: ",modelSim_is_active)
+          // o_x = origin_x+fudge;
+          // o_y = origin_y+fudge;
+          o_x = origin_x;
+          o_y = origin_y;
+          m_x = modelSim_x;
+          m_y = modelSim_y;
+          m_dx = modelSim_dx;
+          m_dy = modelSim_dy;
+          m_pen_down = modelSim_prev_pen[0];
+          m_pen_up = modelSim_prev_pen[1];
+          m_pen_end = modelSim_prev_pen[2];
+          // 여기서 model_prev_pen 업데이트
+          modelSim_state = model.update([m_dx, m_dy, m_pen_down, m_pen_up, m_pen_end], modelSim_state, modelSim_z);
+          // model_steps[i][j] += 1;
+          pdf = model.get_pdf(modelSim_state);
+
+          [m_dx, m_dy, m_pen_down, m_pen_up, m_pen_end] = model.sample(pdf, temperature, 0.5+0.5*temperature);
+
+          // console.log("[m_dx, m_dy, m_pen_down, m_pen_up, m_pen_end]",[m_dx, m_dy, m_pen_down, m_pen_up, m_pen_end])
+          // console.log("modelSim_prev_pen: ",modelSim_prev_pen)//0716문제: modelSim_prev_pen가 계속 [0,0,0]임 -> 원인:modelSim_prev_pen = [0, 0, 0]로 계속 초기화 했었음
+          if (modelSim_prev_pen[0] == 1) {
+            // console.log("modelSim_prev_pen[0] == 1: ",modelSim_prev_pen[0])
+            // draw line connecting prev point to current point.
+            x0 = m_x;
+            y0 = m_y;
+            x1 = (m_x+m_dx);
+            y1 = (m_y+m_dy);
+            // if (inside_box(x0, y0) && inside_box(x1, y1)) {
+              //strokes로 저장되는 값과 미세하게 오프셋
+              p.stroke(raw_line_color = curCol);
+              p.strokeWeight(line_width = curPenWeight);
+              p.line(o_x+x0, o_y+y0, o_x+x1, o_y+y1);
+            // }
+            // save path data into strokes
+            if(firstTimeSim){
+              var last_point = raw_lines[raw_lines.length-1][raw_lines[raw_lines.length-1].length-1];
+              strokes.pop();
+              strokes.push([m_x-last_point[0], m_y-last_point[1], m_pen_down, m_pen_up, m_pen_end]);
+              firstTimeSim=false;
+            }
+          }
+
+          modelSim_dx = m_dx;
+          modelSim_dy = m_dy;
+          modelSim_prev_pen = [m_pen_down, m_pen_up, m_pen_end];
+          modelSim_x += m_dx;
+          modelSim_y += m_dy;
+
+          // save path data into strokes
+          strokes.push([m_dx, m_dy, m_pen_down, m_pen_up, m_pen_end]);
+          //draw_example(strokes, start_x , start_y, curCol);
+
+          if (m_pen_end === 1) {
+            console.log('eeeeeeeeeeeend');
+            modelSim_is_active = false;
+            simModelChanged = false;
+            strokes[strokes.length-1][3] = 1;
+            strokes[strokes.length-1][4] = 0;
+            StrokeToRaw();
+            draw_example(strokes, start_x , start_y, curCol);
+
+            // 다시 'gen'으로 모델 체인지
+            toggleCover();
+            ModelImporter.change_model({}, modelNames, "gen", function(new_model) {
+              console.log("changing")
+              model = new_model
+              model.set_pixel_factor(screen_scale_factor);
+              //set_title_text(format_title_text(model.info.name));
+              // cb();
+              changing_model_lock = false;
+              set_title_text('draw a shape, any shape.');
+              model_loaded = true;
+              // simModelChanged = true;
+              toggleCover();
+              //task control
+              if(isTalkative){
+                task++;
+                button_no.style.display = 'none';
+                button_yes.innerText = 'OK';
+              }
+              else{
+                task = 7;
+                isTimeCntStart = false;  
+              }              
+            }, true);  
+          }
+        }
+        //console.log("drawSimilarStrokes done")
+    }
+
+
+//-----------------------sungwoo added below here-------------------
+    //strokes를 역으로 raw_lines에 추가
+    function StrokeToRaw(){
+      //raw_lines의 총 개수 계산
+      var raw_lines_cnt = 0;
+      for(var j=0; j<raw_lines.length; j++){
+        raw_lines_cnt += raw_lines[j].length;
+      }
+      console.log('raw_lines_cnt', raw_lines_cnt);   
+      
+      var idx = raw_lines_cnt - 1;   
+
+      while(true){
+        var arr = [];
+        var last_point = raw_lines[raw_lines.length-1][raw_lines[raw_lines.length-1].length-1];
+        //pen_up까지의 하나의 오브젝트를 arr에 담음
+        while(true){
+          idx++;
+          if(arr.length) arr.push([arr[arr.length-1][0]+strokes[idx][0], arr[arr.length-1][1]+strokes[idx][1]]);
+          else arr.push([last_point[0]+strokes[idx][0], last_point[1]+strokes[idx][1]]);
+
+          if(strokes[idx][3]==1) break;                
+        }
+        raw_lines.push(arr);
+        if(idx==strokes.length-1) break;
+      }
+
+    }
+
+    function checkArea(){
+      //계산 너무 많으면 mul*mul 픽셀당 계산
+      var occupied = 0;
+      var mul = 60; //한 격자당 가로세로 픽셀 개수 셋팅
+      p.noStroke();
+      for(var i=0; i<screen_width; i+=mul){
+        for(var j=0; j<screen_height; j+=mul){
+          console.log('i= ',i,' j= ',j);
+          var k = p.get(i+mul/2, j+mul/2);
+          if(k[0]!=255 || k[1]!=255 || k[2]!=255){
+            occupied++;
+            p.fill(255,0,0,100); //alpha 0~255 (255 is exactly solid color)
+            p.rect(i,j,mul,mul);
+          }
+          else{
+            p.fill(0,0,0,100);
+            p.rect(i,j,mul,mul);
+          }
+        }
+      }
+      var pct = occupied*mul*mul/(screen_width*screen_height)*100;
+      pct = Math.floor(pct, 1);
+      console.log('all', screen_width*screen_height, 'px, occupied', occupied*mul*mul, 'px, percent', pct,'%');
+    }
+
+    function checkAreaByArray(){
+      p.loadPixels();
+      //console.log(pixels); // debug
+      var d = p.pixelDensity(); // maybe 1~2, 레티나 디스플레이 보정
+      var idx=0;
+      var mul = 1;
+      var occupied = 0;
+
+      for(var i=0; i<screen_height; i++){
+        for(var j=0; j<screen_width; j++){
+          idx = j*4*d + i*screen_width*4*d*d;
+          var r = p.pixels[idx];
+          var g = p.pixels[idx+1];
+          var b = p.pixels[idx+2];
+          //console.log(idx);
+          if(r!=255 || g!=255 || b!=255){
+            occupied++;
+          }
+        }
+      }
+      var pct = occupied/(screen_width*screen_height)*100;
+      pct = Math.round(pct);
+      console.log('pixel density is ',d);
+      console.log('all', screen_width*screen_height, 'px, occupied', occupied, 'px, percent', pct,'%');
+    }
+    
+    function checkWhiteSpace(){
+      //안보이는 외곽선 만들기
+      p.stroke(254,254,254,255);
+      p.line(0,0,0,screen_height);
+      p.line(0,0,screen_width,0);
+      p.line(0,screen_height,screen_width,screen_height);
+      p.line(screen_width,0,screen_width,screen_height);
+      //특정 좌표에서 그림과 간섭없는 가장 큰 원 그리기
+      var x=0, y=0; //중심좌표
+      var x2, y2_p, y2_n //검색할 좌표
+      var r=1 //거리, 원의 반지름
+      var del_r = 3; //몇픽셀 단위로 측정할지 
+      var del_x = 1; //몇픽셀 단위로 x좌표 이동할지, 증가시 캔버스 외곽선 통가할 가능성있음
+      var del_xy = 50; //몇픽셀 단위로 측정점 설정할지
+      var isStopped = false;
+      var isTouched = false;
+      //x^2 + y^2 = r^2 -> y = +- sqrt(r^2-x^2)
+      p.loadPixels();
+      var pxl = p.pixels;
+      //console.log(pixels); // debug
+      var d = p.pixelDensity(); // maybe 1~2, 레티나 디스플레이 보정
+      var search_limit;
+      var res=[]; //결과저장 list
+      
+      search_limit = Math.sqrt(screen_width*screen_width + screen_height*screen_height);
+      for(var i=1; i<screen_height/del_xy; i++){
+      for(var j=1; j<screen_width/del_xy; j++){
+        isStopped = false;
+        x = j*del_xy;
+        y = i*del_xy;
+
+//        p.noStroke();
+//        p.fill(254,0,0,100); //alpha 0~255 (255 is exactly solid color)
+//        p.rect(x,y,5,5);
+        
+        //최대거리용 원 셋업
+        p.noFill();
+        p.stroke(0,0,255,100);
+        p.strokeWeight(1);
+      
+        for(r=0; r<search_limit; r+=del_r){ //계산부하 줄이려면 del_r 높임
+          if(isStopped) break;
+          isTouched = false;
+          
+          for(x2=x+r; x2>=x-r; x2-=del_x){ //계산부하 줄이려면 x2증분 높임
+            if(isTouched) break;
+            y2_p = y + Math.round(Math.sqrt(r*r-(x2-x)*(x2-x)));
+            y2_n = y - Math.round(Math.sqrt(r*r-(x2-x)*(x2-x)));
+            //캔버스 바깥범위는 탐색 안하도록. 최적화
+            //p5 메소드 콜시에 시간오래 걸림. 중복반복문에선 안쓰는게 좋음 
+            
+            if(x2<0 || x2>screen_width) continue;
+            else if(y2_p>screen_height) checkCoordinate(x2, y2_n);
+            else if(y2_n<0) checkCoordinate(x2, y2_p);
+            else{
+              checkCoordinate(x2, y2_p);
+              checkCoordinate(x2, y2_n);
+            }
+          }
+        }
+      }
+      }
+      
+      res.sort(function(a,b){return a.r<b.r ? 1 : a.r>b.r ? -1 : 0;});
+      for(var i=0; i<1; i++){
+//        p.noFill();
+//        p.stroke(0,0,255,100);
+//        p.ellipse(res[i].x, res[i].y, res[i].r*2, res[i].r*2);
+//        p.noStroke();
+//        p.fill(255,0,0,100); //alpha 0~255 (255 is exactly solid color)
+//        p.rect(res[i].x,res[i].y,5,5);
+//        console.log(res[i].i,res[i].j, res[i].r);
+        makeSpaceAlert(res[i].x,res[i].y,res[i].r);
+      }
+      
+      //y2_n, y2_p 구분해서 입력하면 최소 접촉좌표 x2, y2 및 거리 r 계산하는 내부함수
+      function checkCoordinate(x2, y2){
+        //체크점 표시
+//        p.rect(x2,y2,1,1);
+        //y2 search
+        var idx = x2*4*d + y2*screen_width*4*d*d; //좌표 -> 배열인덱스 매핑
+        var red = pxl[idx];
+        var g = pxl[idx+1];
+        var b = pxl[idx+2];
+        var a = pxl[idx+3];
+        if((red!=255 || g!=255 || b!=255)&&a==255){
+//        if(a=255){
+//          p.ellipse(x,y,r*2,r*2);
+//          console.log('stop searching at i=',i, 'j=',j,'\n rgb=', red, g, b, '\n r=', r,'x=', x2, 'y=', y2);
+          res.push({
+            i:i,
+            j:j,
+            r:r,
+            x:x,
+            y:y,
+            x2:x2,
+            y2:y2
+          });
+          isStopped = true;
+          isTouched = true;
+        }
+      }
+    }
+ 
+    p.keyPressed = function(){
+      if(p.keyCode===32){ //space
+        checkWhiteSpace();
+        checkAreaByArray();
+  //          checkArea();
+      }
+      else if(p.keyCode===p.ENTER){
+        console.log('ENTER PRESSED...save canvas to jpg file');
+        p.saveCanvas(p.canvas,"canvasImage","png"); //save image
+      }
+      else if(p.keyCode===48){ //'0'
+          console.log('previouse isModelDrawn is',isModelDrawn);
+          console.log('previouse strokesLength is',strokes.length);
+          strokes = strokes.slice(0,-1*extStrokesLength);
+          clear_screen();
+          draw_example(strokes, start_x , start_y, line_color);
+          restart_model(strokes);
+          isModelDrawn = false;
+          console.log('isModelDrawn changed to',isModelDrawn);
+          console.log('strokesLength changed to',strokes.length);
+      }
+      else if(p.keyCode===57){ //'9'
+        toggleCover();
+        ModelImporter.change_model({}, modelNames, "vae", function(new_model) {
+          console.log("changing")
+          model = new_model
+          model.set_pixel_factor(screen_scale_factor);
+          //set_title_text(format_title_text(model.info.name));
+          // cb();
+          changing_model_lock = false;
+          set_title_text('draw a shape, any shape.');
+          model_loaded = true;
+          simModelChanged = true;
+          toggleCover();
+        }, true);
+      }
+      else if(p.keyCode===56){//'8'
+        console.log("prevImageStrokes: ",prevImageStrokes);
+        console.log("simModelChanged: ",simModelChanged);
+        console.log("start_x: ",start_x);
+        console.log("start_y: ",start_y);
+      }
+
+      else if(p.keyCode===49){//'1' for test
+        findObjCoordinate(0,length_obj1);
+        console.log('max_xy', max_xy, 'min_xy', min_xy);
+      }
+    }
+
+    //로딩창 띄우고 없애기
+    function toggleCover(){
+      //모델체인지할때 브라우저 자체가 멈추는듯... gif 안돌아감...
+      var cover = document.getElementById('cover');
+      cover.addEventListener('click', function(e){
+        e.preventDefault();
+      });
+      if(cover.style.display == 'none') cover.style.display = 'initial';
+      else cover.style.display ='none';
+    }
+    
+    p.mousePressed = function(){
+      new_start_x = p.mouseX;
+      new_start_y = p.mouseY;
+      var px = p.get(new_start_x, new_start_y);
+      console.log(new_start_x, new_start_y, px);
+      // document.getElementById('title').innerHTML = new_start_x+" "+ new_start_y; //llllllllllllll
+    }
+    
+    //아이콘클릭 효과
+    document.getElementById('penWeight').addEventListener('click', function(e){
+      e.target.style.backgroundColor = 'gray';
+      curPenWeight = 3;
+      console.log('curPenWeight', curPenWeight);
+      if(curCol.length == 4 ) curCol[3] = 255;
+      setTimeout(function() {
+        e.target.style.backgroundColor = 'rgb(200,200,200)';
+      }, 40);
+    });
+    document.getElementById('brushWeight').addEventListener('click', function(e){
+      e.target.style.backgroundColor = 'gray';
+      curPenWeight = 15;
+      console.log('curPenWeight', curPenWeight);
+      if(curCol.length == 4 ) curCol[3] = 150;
+      else curCol = [ (('0x'+curCol.substring(1,3))*1).toString(), (('0x'+curCol.substring(3,5))*1).toString(), (('0x'+curCol.substring(5,7))*1).toString(), 150];
+      setTimeout(function() {
+        e.target.style.backgroundColor = 'rgb(200,200,200)';
+      }, 40);
+    });
+    document.getElementById('cancel').addEventListener('click', function(e){
+      e.target.style.backgroundColor = 'gray';
+      cancelClick();
+      console.log('previous line erased...');
+      setTimeout(function() {
+        e.target.style.backgroundColor = 'rgb(200,200,200)';
+      }, 40);
+    });
+    
+    function cancelClick(){
+      colors.pop();
+      penWeights.pop();
+      //raw_lines에는 절대좌표 기록, strokes에는 상대 좌표 거리 기록
+      //sketchRNN은 strokes만 만들고 raw_line은 안만듦
+      if(raw_lines.length){
+        raw_lines.pop();
+        if(raw_lines.length == length_obj2) length_obj2--;
+      }
+      while(true){
+        if(strokes) strokes.pop();
+        if(strokes.length==0 || strokes[strokes.length-1][3]==1) break;
+      }
+      clear_screen();
+      if(colors.length==0){ //오브젝트 하나도 없으면 재시작
+        has_started = false;
+        return;
+      }
+      draw_example(strokes, start_x , start_y, line_color);
+    }
+
+    //raw_lines에서 length1부터 length2 - 1 까지의 max/min x,y값 찾아줌
+    function findObjCoordinate(length1, length2){
+      var temp_x = [];
+      var temp_y = [];
+      for(var i=length1; i<length2; i++){
+        for(var j=0; j<raw_lines[i].length; j++){
+          temp_x.push(raw_lines[i][j][0]);
+          temp_y.push(raw_lines[i][j][1]);
+        }
+      }
+      max_xy[0] = Math.max.apply(0, temp_x);
+      max_xy[1] = Math.max.apply(0, temp_y);
+      min_xy[0] = Math.min.apply(0, temp_x);
+      min_xy[1] = Math.min.apply(0, temp_y);
+    }
+
+    //clipArt 위치 설정
+    function setClipArtLoc(){
+      findObjCoordinate(0, length_obj2);
+      var w = max_xy[0] - min_xy[0];
+      var h = max_xy[1] - min_xy[1];
+      img = p.loadImage("imgsrc/"+clipImg[drawMode]+"1.png", function(img) {
+        for(var i=0; i<1; i++){ //coconut
+          if(drawMode == 0){
+            clip_h = h*0.25;
+            clip_w = clip_h*2;
+            clip_x = min_xy[0] + w*0.1;
+            clip_y = max_xy[1] - clip_h*0.5;
+          }
+          else if(drawMode == 1){ //dish
+            clip_w = w*1.5;
+            clip_h = clip_w*0.35;
+            clip_x = min_xy[0] - (clip_w - w)/2;
+            clip_y = min_xy[1] + h*0.7;                
+          }
+          else if(drawMode == 2){ //nose
+            clip_w = w*1/3;
+            clip_h = clip_w*1.33;
+            clip_x = min_xy[0] + clip_w*1;
+            clip_y = min_xy[1] + h*1.2;
+          }
+          // if(drawMode == 1){//only for dish
+          //   clear_screen();
+          //   p.image(img, clip_x, clip_y, clip_w, clip_h);
+          //   draw_example(strokes, start_x , start_y, line_color);
+          // }
+          // else p.image(img, clip_x, clip_y, clip_w, clip_h);
+        }
+        isTalkative? task++ : task=13;
+        drawClipArt = true;
+        //이미지 서서히 스와잎하게 효과넣기            
+      });
+    }
+
+    //---------------------task event--------------------------
+    //dom
+    var button_cntr = document.getElementById('button_cntr');
+    var button_yes = document.getElementById("button_yes");
+    var button_no = document.getElementById("button_no");
+
+    // task event control
+    button_yes.addEventListener("click", function(e){
+      if(task>=0 && task<taskText[drawMode].length){
+        e.preventDefault();
+        console.log('button_YES just clicked, task:',task);
+
+        if(task==2){ //나머지는 내가 그려볼게요
+          run_encode_strokes = false;
+          isModelDrawn = false;
+        }
+
+        else if(task==3){ //헤헤, 맘에 드시나요?
+          task = 5;
+        }
+
+        else if(task==5){ //또 다른 야자나무를 하나 더 그려볼게요!
+          findObjCoordinate(0, length_obj1);
+          toggleCover();
+          ModelImporter.change_model({}, modelNames, "vae", function(new_model) {
+            console.log("changing")
+            model = new_model
+            model.set_pixel_factor(screen_scale_factor);
+            changing_model_lock = false;
+            set_title_text('draw a shape, any shape.');
+            model_loaded = true;
+            simModelChanged = true;
+            toggleCover();
+          }, true);
+        }
+
+        else if(task==6){ //헤헤, 맘에 드시나요?
+          task++;
+          button_no.style.display = 'inline-block';
+          button_yes.innerText = 'yes';
+        }
+
+        else if(task==7){ //야자나무와 어울리는 코코넛을 그려볼게요!
+          setClipArtLoc();
+        }
+
+        else if(task==8){
+          task += 3;  //task 11
+          button_cntr.style.display = 'none';    
+        }
+
+        else if(task==9){
+          drawClipArt = true;
+          sy = 0;
+          img = p.loadImage("imgsrc/"+clipImg[drawMode]+"2.png", function(img) {
+            // p.image(img, clip_x, clip_y, clip_w, clip_h);
+            drawClipArtAfterSweep = false;
+            task--; //task 8
+            button_no.style.display = 'inline-block';
+            button_yes.innerText = 'yes';   
+          });
+        }
+
+        else if(task==10){
+          drawClipArt = true;
+          sy = 0;
+          img = p.loadImage("imgsrc/"+clipImg[drawMode]+"3.png", function(img) {
+            // p.image(img, clip_x, clip_y, clip_w, clip_h);
+            drawClipArtAfterSweep = false;
+            task++; //task 11
+            button_cntr.style.display = 'none';
+          });
+        }
+
+        else if(task==13){ //여기 빈 공간이 큰 것 같아요. 뭘 좀 그리는게 어떨까요?
+          // isTimeCntStart = false;   
+          button_cntr.style.display = 'none';     
+        }
+
+        else if(task==15){
+          console.log('ENTER PRESSED...save canvas to jpg file');
+          p.saveCanvas(p.canvas,"canvasImage","png"); //save image
+        }
+
+      }
+    });
+
+    button_no.addEventListener("click", function(e){
+      e.preventDefault();
+      console.log('button_NO just clicked, task:',task);
+      if(task==2){ //나머지 부분은 제가 그려볼게요!
+        task = 5; // vae 모두 건너뜀
+      }
+
+      else if(task==3){ //헤헤, 맘에 드시나요? //sketchRNN
+        task++;
+        console.log('previouse isModelDrawn is',isModelDrawn);
+        console.log('previouse strokesLength is',strokes.length);
+        strokes = strokes.slice(0,-1*extStrokesLength);
+        clear_screen();
+        draw_example(strokes, start_x , start_y, line_color);
+        restart_model(strokes);
+        isModelDrawn = false;
+        console.log('isModelDrawn changed to',isModelDrawn);
+        console.log('strokesLength changed to',strokes.length);
+      }
+
+      else if(task==5){
+        task += 2; //task 7
+      }
+
+      else if(task==7 || task==9){ //야자나무와 어울리는 코코넛을 그려볼게요!
+        task = 11;
+        button_cntr.style.display = 'none';
+      }   
+
+      else if(task==8){ //헤헤, 맘에 드시나요? //ClipArt
+        if(isFinalImg) task+=2; //task10
+        else{
+          task++; //task9
+          isFinalImg = true;
+        }
+        drawClipArt = false;
+        button_no.style.display = 'none';
+        button_yes.innerText = 'OK';        
+        clear_screen();
+        draw_example(strokes, start_x, start_y, curCol);
+      }
+
+      else if(task==13){
+        task+=2; //task15
+        button_no.style.display = 'none';
+        button_yes.innerText = 'OK'; 
+      }
+    
+    });
+
+  }
+  var custom_p5 = new p5(sketch, 'sketch');
+
+  var new_start_x, new_start_y;
+  var curPenWeight = 3;
+  var colors = []; //save all colors of each line
+  var penWeights = [];
+  var isModelDrawn = true;
+  var isSimDrawn = false;
+  var strokes;
+  var raw_lines;
+  var extStrokesLength;
+  var drawClipArt = false;
+  var drawClipArtAfterSweep = false; //sweep효과후 draw_examlple에서 실행
+  var img;
+  var isFinalImg = false;
+  var isTimeCntStart = false;
+  var mySetTime; //for setTimnout()
+  var myInterval; //for setInterval()
+  var isIntervalStart = false;
+  var intCnt = 0;
+  var length_obj1, length_obj2; //raw_lines 로부터 야자수 오브젝트 인덱스 저장
+  var min_xy = new Array(2);
+  var max_xy = new Array(2); //야자수 오브젝트 위치저장
+  var modelNames;
+  var sy = 0;
+  var selection2; //(drawmode)
+  var selection3; //(istalkative)
+  var settings; 
+
+  //---------------------팔레트 아이콘
+  var pallet = document.getElementById('pallet'); //팔레트 아이콘 돔
+  var palVal = document.getElementById('palVal'); //팔레트 확장영역 돔
+  var p_wdt = 70, p_hgt = 70; //팔레트 아이콘 크기
+  //pallet css 설정
+  pallet.style.width = p_wdt+'px';
+  pallet.style.height = p_hgt+'px';
+  //palVal css 설정
+  palVal.style.display ='none';
+  palVal.style.boxSizing = 'border-box';
+  palVal.style.width = '150px';
+  palVal.style.height = '200px';
+  palVal.style.borderRadius = '20px';
+  palVal.style.border = '5px solid gray';
+  palVal.style.backgroundColor = 'rgba(100,100,100,.5)'
+  palVal.style.position = 'absolute';
+  palVal.style.left = p_wdt/2+'px';
+  palVal.style.top = p_hgt/2+'px';
+  palVal.style.padding = '20px 10px';
+  palVal.style.zIndex = 0;
+  
+  var curCol = '#000000'; //현재 선택된컬러
+  // var colorArr = ['black', 'green', 'blue', 'pink', 'yellow', 'purple', 'cyan', 'orange', 'red'];
+  // colorArr.forEach(function(item, i){
+  //   var colVal = document.createElement('div');
+  //   palVal.appendChild(colVal);
+  //   colVal.setAttribute('class', 'colorVal'); // 공통 css적용
+  //   colVal.style.backgroundColor = item;
+  //   //컬러 선택시 변하는 부분 이벤트
+  //   colVal.addEventListener('click', function(e){
+  //     curCol = e.target.style.backgroundColor;
+      // console.log(curCol);
+      // pallet.style.backgroundColor = curCol;
+      // if(palVal.style.display == 'none'){
+        // palVal.style.display ='initial';
+      // }
+      // else palVal.style.display ='none';
+  //   });
+  // });
+
+  // var p_cntr = document.getElementById('p_cntr');
+  // pc버전 인터페이스
+  // p_cntr.addEventListener('mouseover', function(){
+  //   palVal.style.display ='initial';
+  // });
+  // p_cntr.addEventListener('mouseout', function(){
+  //   palVal.style.display ='none';
+  // });
+  //아이패드 버전 인터페이스
+  pallet.addEventListener('click', function(){
+    if(palVal.style.display == 'none'){
+      palVal.style.display ='initial';
+    }
+    else palVal.style.display ='none';
+  });
+  
+  //빈공간 알려주는 돔 생성
+  function makeSpaceAlert(x,y,r){
+    var mapVal = .6; //r의 몇배크기 원 만들지
+    var wdt = r*mapVal*2;
+    var hgt = r*mapVal*2;
+    var circle = document.getElementById('spaceAlert');
+    circle.style.left = x+'px';
+    circle.style.top = y+'px';
+    circle.style.display = 'initial';
+    circle.style.width = '0px';
+    circle.style.height = '0px';
+    circle.style.border = '5px dotted red';
+    setTimeout(function(){
+      circle.style.border = '5px dotted transparent';
+      circle.style.width = wdt+'px';
+      circle.style.height = hgt+'px'; 
+      circle.style.left = x-wdt/2+'px';
+      circle.style.top = y-hgt/2+'px';
+    }, 10);
+    setTimeout(function(){
+      circle.style.display = 'none';
+    }, 2000);
+  }
+
+  function setMode(){
+    drawMode = 0;
+    isTalkative = !true;
+    //------parsing from settings dom
+    // settings = document.getElementById("settings").childNodes[0].data.split(',');
+    // selection2 = settings[1].replace('\'','');
+    // selection2 = selection2.replace(/ /gi,'');
+    // selection2 = selection2.replace(/\'/gi,''); //drawmode
+    // selection3 = settings[2].replace(/\'/gi,'');
+    // selection3 = selection3.replace(']','');
+    // selection3 = selection3.replace(/ /gi,''); //istalkative
+    
+    // for jango sever
+    // if(selection2 == 'landscape') drawMode = 0
+    // else if(selection2 == 'portrait') drawMode = 2;
+    // else drawMode = 1;
+    // if(selection3 == 'istalkative') isTalkative = true;    
+    // else isTalkative = false;    
+    
+    //model
+    if(drawMode==0) modelNames = 'palm_tree';
+    else if(drawMode==1) modelNames = 'strawberry';
+    else if(drawMode==2) modelNames = 'eye';
+    //hashtag
+    // if(isTalkative) document.getElementById('button_sel3').innerText = '#Talkative';
+    // else document.getElementById('button_sel3').innerText = '#Silent';
+
+    // if(drawMode == 0) document.getElementById('button_sel2').innerText = '#Landscape';
+    // else if(drawMode == 1) document.getElementById('button_sel2').innerText = '#Still life';
+    // else if(drawMode == 2) document.getElementById('button_sel2').innerText = '#Portrait';
+  }
+
+  var screen_width, screen_height, temperature_slider;
+  //for css setting
+  document.body.onload = function(){
+    var iconEle = document.getElementsByClassName('icons');
+    for(var i=0; i<iconEle.length-1; i++){
+      iconEle[i].style.backgroundColor = 'rgb(200,200,200)';
+    }
+    document.getElementById('twinkle').addEventListener('click', function(e){
+      e.preventDefault();
+      return;
+    });
+    //color pallet
+    var tdArr = document.querySelectorAll('td');
+    tdArr.forEach(function(item){
+      item.addEventListener('click', function(e){
+        if(palVal.style.display == 'none'){
+          palVal.style.display ='initial';
+        }
+        else palVal.style.display ='none';
+
+        curCol = e.target.getAttribute('bgcolor');
+        pallet.style.backgroundColor = curCol;
+        if(curPenWeight == 15) curCol = [ (('0x'+curCol.substring(1,3))*1).toString(), (('0x'+curCol.substring(3,5))*1).toString(), (('0x'+curCol.substring(5,7))*1).toString(), 150];
+        console.log(curCol);
+      });
+    });
+  }
+
+</script>
+
+</html>
